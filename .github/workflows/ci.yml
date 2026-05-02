@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  macos:
+    name: macOS / Ruby ${{ matrix.ruby }}
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['3.2', '3.3', '3.4']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clone libBeresta (read-only) for codegen + native build
+        run: |
+          git clone --depth=1 https://github.com/libBeresta/libBeresta.git ../libBeresta
+
+      - name: Install build deps (cmake, libpng, zlib, pkg-config)
+        run: |
+          brew update
+          brew install cmake libpng pkg-config
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - name: Build libBeresta.dylib
+        run: |
+          cmake -S . -B build \
+            -DLIBBRST_SOURCE_DIR=$(cd ../libBeresta && pwd) \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --config Release -j
+
+      - name: Regenerate FFI bindings from .lsp
+        run: |
+          ruby generator/bin/brst-binding-ruby-gen \
+            --data-dir ../libBeresta/gen/data \
+            --out-dir lib/brst/binding/ruby
+
+      - name: Verify regeneration is idempotent (no diff)
+        run: |
+          if ! git diff --quiet -- lib/brst/binding/ruby; then
+            echo "Regeneration produced a diff — committed bindings drifted from generator output:"
+            git diff --stat -- lib/brst/binding/ruby
+            git diff -- lib/brst/binding/ruby
+            exit 1
+          fi
+
+      - name: Run tests
+        run: bundle exec rspec
+
+      - name: Build gem
+        run: gem build brst-binding-ruby.gemspec
