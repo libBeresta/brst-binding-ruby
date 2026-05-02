@@ -58,3 +58,38 @@ add_custom_target(brst_binding_ruby_stage ALL
             "${_outdir}/$<TARGET_FILE_NAME:brst>"
     DEPENDS brst
     COMMENT "Staging libbrst shared library into ext/libBeresta/lib/")
+
+# ---------------------------------------------------------------------------
+# Mandatory libBeresta org-wide CMake targets
+#
+# Per dmitrys99's guidance (libBeresta/libBeresta#19), every
+# brst-binding-<lang> repository exposes three standard targets so that
+# cross-language CI/CD pipelines can drive each binding uniformly:
+#
+#   - binding: regenerate the FFI bindings from libBeresta/gen/data/*.lsp
+#   - check:   run the binding's test suite
+#   - bundle:  produce the language-native distribution archive
+#
+# For Ruby these shell out to ruby / bundle / gem respectively.
+# ---------------------------------------------------------------------------
+
+set(_gen_data_dir    "${LIBBRST_SOURCE_DIR}/gen/data")
+set(_binding_out_dir "${CMAKE_CURRENT_LIST_DIR}/lib/brst/binding/ruby")
+
+add_custom_target(binding
+    COMMAND ruby
+            "${CMAKE_CURRENT_LIST_DIR}/generator/bin/brst-binding-ruby-gen"
+            --data-dir "${_gen_data_dir}"
+            --out-dir  "${_binding_out_dir}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+    COMMENT "Regenerating FFI bindings from ${_gen_data_dir}")
+
+add_custom_target(check
+    COMMAND bundle exec rspec
+    WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+    COMMENT "Running rspec to verify the bindings")
+
+add_custom_target(bundle
+    COMMAND gem build brst-binding-ruby.gemspec
+    WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+    COMMENT "Building brst-binding-ruby .gem archive")
