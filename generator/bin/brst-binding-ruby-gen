@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "optparse"
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+require "brst_binding_ruby_gen"
+
+options = { lang: "en" }
+OptionParser.new do |op|
+  op.banner = "Usage: brst-binding-ruby-gen --data-dir DIR --out-dir DIR [--lang en|ru]"
+  op.on("--data-dir DIR", "Path to libBeresta gen/data directory") { |v| options[:data_dir] = v }
+  op.on("--out-dir DIR",  "Output directory for generated bindings") { |v| options[:out_dir]  = v }
+  op.on("--lang LANG",    "Doc language (en|ru), default en") { |v| options[:lang] = v }
+end.parse!
+
+abort "missing --data-dir" unless options[:data_dir]
+abort "missing --out-dir"  unless options[:out_dir]
+
+count = BrstBindingRubyGen.run(
+  data_dir: options[:data_dir],
+  out_dir:  options[:out_dir],
+  lang:     options[:lang]
+)
+puts "[brst-binding-ruby-gen] processed #{count} .lsp files -> #{options[:out_dir]}"
