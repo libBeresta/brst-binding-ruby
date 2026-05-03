@@ -201,21 +201,21 @@ module BrstBindingRubyGen
 
     # `PageSizes` is referenced by functions in base.lsp and page_routines.lsp,
     # but the .lsp files never declare it as an :enum. Upstream's C header
-    # `brst_page_sizes_iso_216.h` (used when LIBBRST_ISO_216_ONLY=ON, the
-    # default build mode) auto-numbers ISO 216 entries from 0 in the same
-    # source order they appear in page_sizes.lsp. Synthesise the matching
-    # FFI enum so callers can pass `:A4` instead of a magic integer.
+    # `brst_page_sizes.h` auto-numbers every entry from 0 in the same source
+    # order they appear in page_sizes.lsp, spanning all origins (US Loose,
+    # US ANSI, US Arch, ISO 216, JIS B, etc.). Synthesise the matching FFI
+    # enum so callers can pass `:A4` (or `:US_LETTER`, `:US_ARCH_A`, ...)
+    # instead of a magic integer.
     def synthesize_page_sizes_enum!
-      iso216 = @sizes.select { |s| s[:origin] == "ISO 216" }
-      return if iso216.empty?
-      elements = iso216.each_with_index.map do |s, i|
+      return if @sizes.empty?
+      elements = @sizes.each_with_index.map do |s, i|
         { element: s[:id], value: i, en: "", ru: "" }
       end
-      elements << { element: "EOF", value: iso216.size, en: "", ru: "" }
+      elements << { element: "EOF", value: @sizes.size, en: "", ru: "" }
       @enums["PageSizes"] = {
         name: "PageSizes",
         elements: elements,
-        en: "ISO 216 page size enum (synthesised from page_sizes.lsp).",
+        en: "Page size enum (synthesised from page_sizes.lsp, all origins).",
         ru: ""
       }
     end
