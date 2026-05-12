@@ -11,7 +11,7 @@ require_relative "types"
 module Brst
   module Binding
     module Ruby
-      module DocXobject
+      module Image
         extend FFI::Library
         ffi_lib Brst::Binding::Ruby::Library.lib_path
 
@@ -32,7 +32,13 @@ module Brst
           MISSING_SYMBOLS << [name, e.message]
         end
 
-          safe_attach :BRST_Doc_XObject_Create, [:Doc, :float, :float, :float, :float], :XObject
+          safe_attach :BRST_Image_AddSMask, [:Image, :Image], :uint32
+          safe_attach :BRST_Image_Width, [:Image], :uint32
+          safe_attach :BRST_Image_Height, [:Image], :uint32
+          safe_attach :BRST_Image_BitsPerComponent, [:Image], :uint32
+          safe_attach :BRST_Image_ColorSpace, [:Image], :string
+          safe_attach :BRST_Image_SetColorMask, [:Image, :uint32, :uint32, :uint32, :uint32, :uint32, :uint32], :uint32
+          safe_attach :BRST_Image_SetMaskImage, [:Image, :Image], :uint32
       end
     end
   end
