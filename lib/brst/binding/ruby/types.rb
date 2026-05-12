@@ -69,6 +69,7 @@ def apply_pointers(mod)
           mod.typedef :pointer, :Date
           mod.typedef :pointer, :Dict
           mod.typedef :pointer, :Doc
+          mod.typedef :pointer, :Encoder
           mod.typedef :pointer, :Error
           mod.typedef :pointer, :FontDef
           mod.typedef :pointer, :Matrix
@@ -168,10 +169,13 @@ end
 def apply_definitions(mod)
           mod.typedef :Dict, :Annotation
           mod.typedef :Array, :Destination
+          mod.typedef :Dict, :EmbeddedFile
           mod.typedef :Dict, :OutputIntent
+          mod.typedef :Dict, :PDFAType
           mod.typedef :Dict, :ExData
           mod.typedef :Dict, :ExtGState
           mod.typedef :Dict, :Font
+          mod.typedef :Dict, :Image
           mod.typedef :Dict, :JavaScript
           mod.typedef :Dict, :Page
           mod.typedef :Dict, :Pattern

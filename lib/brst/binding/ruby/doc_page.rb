@@ -41,7 +41,7 @@ module Brst
           safe_attach :BRST_Doc_Page_Current, [:Doc], :Page
           safe_attach :BRST_Doc_Page_Add, [:Doc], :Page
           safe_attach :BRST_Doc_Page_Insert, [:Doc, :Page], :Page
-          safe_attach :BRST_Doc_Page_AddLabel, [:Doc, :uint32, :PageNumStyle, :uint32, :string], :uint32
+          safe_attach :BRST_Doc_Page_AddLabel, [:Doc, :uint32, :PageNum, :uint32, :string], :uint32
       end
     end
   end

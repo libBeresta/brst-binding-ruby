@@ -32,14 +32,14 @@ module Brst
           MISSING_SYMBOLS << [name, e.message]
         end
 
-          safe_attach :BRST_UseJPFonts, [:Doc], :uint32
-          safe_attach :BRST_UseKRFonts, [:Doc], :uint32
-          safe_attach :BRST_UseCNSFonts, [:Doc], :uint32
-          safe_attach :BRST_UseCNTFonts, [:Doc], :uint32
-          safe_attach :BRST_UseJPEncodings, [:Doc], :uint32
-          safe_attach :BRST_UseKREncodings, [:Doc], :uint32
-          safe_attach :BRST_UseCNSEncodings, [:Doc], :uint32
-          safe_attach :BRST_UseCNTEncodings, [:Doc], :uint32
+          safe_attach :BRST_Doc_UseJPFonts, [:Doc], :uint32
+          safe_attach :BRST_Doc_UseKRFonts, [:Doc], :uint32
+          safe_attach :BRST_Doc_UseCNSFonts, [:Doc], :uint32
+          safe_attach :BRST_Doc_UseCNTFonts, [:Doc], :uint32
+          safe_attach :BRST_Doc_UseJPEncodings, [:Doc], :uint32
+          safe_attach :BRST_Doc_UseKREncodings, [:Doc], :uint32
+          safe_attach :BRST_Doc_UseCNSEncodings, [:Doc], :uint32
+          safe_attach :BRST_Doc_UseCNTEncodings, [:Doc], :uint32
       end
     end
   end
