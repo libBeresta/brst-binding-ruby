@@ -32,7 +32,7 @@ module Brst
           MISSING_SYMBOLS << [name, e.message]
         end
 
-          safe_attach :BRST_Doc_XObject_Create, [:Doc, :float, :float, :float, :float], :XObject
+          safe_attach :BRST_Doc_XObject_New, [:Doc, :float, :float, :float, :float], :XObject
       end
     end
   end

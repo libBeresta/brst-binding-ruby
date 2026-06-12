@@ -49,7 +49,7 @@ module Brst
           safe_attach :BRST_Page_Insert_Shared_Content_Stream, [:Page, :Dict], :uint32
           safe_attach :BRST_Page_RawWrite, [:Page, :string], :uint32
           safe_attach :BRST_Page_SetExtGState, [:Page, :ExtGState], :uint32
-          safe_attach :BRST_Page_CreateDestination, [:Page], :Destination
+          safe_attach :BRST_Page_Destination_New, [:Page], :Destination
       end
     end
   end
