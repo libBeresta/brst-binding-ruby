@@ -32,7 +32,7 @@ module Brst
           MISSING_SYMBOLS << [name, e.message]
         end
 
-          safe_attach :BRST_Doc_Pattern_Tiling_Create, [:Doc, :float, :float, :float, :float, :float, :float, :Matrix], :Pattern
+          safe_attach :BRST_Doc_Pattern_Tiling_New, [:Doc, :float, :float, :float, :float, :float, :float, :Matrix], :Pattern
           safe_attach :BRST_Doc_Pattern_Stream, [:Pattern], :Stream
       end
     end

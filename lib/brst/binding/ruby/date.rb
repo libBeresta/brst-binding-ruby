@@ -32,7 +32,7 @@ module Brst
           MISSING_SYMBOLS << [name, e.message]
         end
 
-          safe_attach :BRST_Date_Now, [:Doc], :Date
+          safe_attach :BRST_Doc_Date_Now, [:Doc], :Date
           safe_attach :BRST_Date_Part, [:Date, :Date_Parts], :int32
           safe_attach :BRST_Date_Validate, [:Date], :uint32
           safe_attach :BRST_Date_Free, [:Date], :void

@@ -32,7 +32,7 @@ module Brst
           MISSING_SYMBOLS << [name, e.message]
         end
 
-          safe_attach :BRST_Doc_Create_ExtGState, [:Doc], :ExtGState
+          safe_attach :BRST_Doc_ExtGState_New, [:Doc], :ExtGState
       end
     end
   end

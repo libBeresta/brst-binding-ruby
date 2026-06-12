@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Changed
+- Regenerated bindings against upstream naming-convention renames
+  (libBeresta PR #64). Six functions renamed on the FFI surface:
+  `BRST_Date_Now` → `BRST_Doc_Date_Now`,
+  `BRST_Doc_Create_ExtGState` → `BRST_Doc_ExtGState_New`,
+  `BRST_Doc_Pattern_Tiling_Create` → `BRST_Doc_Pattern_Tiling_New`
+  (also in `DocPagePattern`),
+  `BRST_Doc_XObject_Create` → `BRST_Doc_XObject_New`,
+  `BRST_Page_CreateDestination` → `BRST_Page_Destination_New`.
+
 ## [0.1.0] - TBD (pending libBeresta 1.0.0 release)
 
 Initial experimental release.
