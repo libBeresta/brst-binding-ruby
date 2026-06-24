@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added
+- Linux (Ubuntu 24.04) CI: converted the single macOS job into an
+  `os × ruby` matrix covering both macOS 14 and Ubuntu 24.04
+  (addresses the Linux support noted in 0.1.0 Known limitations).
+  No Ruby code changes — `Library.lib_path` already resolves `.so`.
+
 ### Changed
 - Regenerated bindings against upstream naming-convention renames
   (libBeresta PR #64). Six functions renamed on the FFI surface:
