@@ -6,13 +6,14 @@ on:
   pull_request:
 
 jobs:
-  macos:
-    name: macOS / Ruby ${{ matrix.ruby }}
-    runs-on: macos-14
+  test:
+    name: ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['3.2', '3.3', '3.4']
+        os: [macos-14, ubuntu-24.04]
+        ruby: ["3.2", "3.3", "3.4"]
     steps:
       - uses: actions/checkout@v4
 
@@ -20,10 +21,17 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/libBeresta/libBeresta.git ../libBeresta
 
-      - name: Install build deps (cmake, libpng, zlib, pkg-config)
+      - name: Install build deps (macOS)
+        if: runner.os == 'macOS'
         run: |
           brew update
           brew install cmake libpng pkg-config
+
+      - name: Install build deps (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libpng-dev zlib1g-dev pkg-config build-essential
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -31,7 +39,7 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
-      - name: Build libBeresta.dylib
+      - name: Build libBeresta shared library
         run: |
           cmake -S . -B build \
             -DLIBBRST_SOURCE_DIR=$(cd ../libBeresta && pwd) \
