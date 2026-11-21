@@ -14,7 +14,7 @@ to the upstream API.
 
 - Auto-generated low-level FFI surface from `gen/data/*.lsp`. This release is
   generated from libBeresta 1.0.1.
-- Tested in CI on macOS 14 and Ubuntu 24.04 with Ruby 3.2 – 3.4.
+- Tested in CI on macOS 15 and Ubuntu 24.04 with Ruby 3.2 – 3.4.
 - An idiomatic, higher-level Ruby API is **not** part of this gem; that is
   planned as a separate gem on top of these low-level bindings.
 - libBeresta itself is **not** bundled. The gem loads a `libbrst` shared

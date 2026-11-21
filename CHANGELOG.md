@@ -8,7 +8,7 @@ Initial experimental release.
 - Low-level FFI bindings auto-generated from libBeresta's canonical
   S-expression definitions (`gen/data/*.lsp`), generated from libBeresta 1.0.1.
 - S-expression parser and Ruby FFI renderer in `generator/`.
-- Smoke tests that generate PDFs, run in CI on macOS 14 and Ubuntu 24.04.
+- Smoke tests that generate PDFs, run in CI on macOS 15 and Ubuntu 24.04.
 - mandatory baseline: README.md + CMakeLists.txt at repository root
   (per libBeresta org-wide `brst-binding-<lang>` family convention).
 - Release workflow that publishes to rubygems.org through Trusted Publishing
