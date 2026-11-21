@@ -28,14 +28,12 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir[
     "lib/**/*.rb",
-    "ext/extconf.rb",
     "CMakeLists.txt",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
   ]
   spec.require_paths = ["lib"]
-  spec.extensions    = ["ext/extconf.rb"]
 
   spec.add_dependency "ffi", "~> 1.16"
 

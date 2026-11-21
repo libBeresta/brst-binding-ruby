@@ -7,7 +7,7 @@
 #
 # Two modes are supported:
 #
-# 1. Vendored source mode (preferred for `gem install`):
+# 1. Vendored source mode:
 #      Drop libBeresta source into ext/libBeresta/ (e.g. via git submodule or
 #      tarball) and build from this directory:
 #          cmake -S . -B build
