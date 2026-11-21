@@ -54,9 +54,12 @@ jobs:
 
       - name: Verify regeneration is idempotent (no diff)
         run: |
-          if ! git diff --quiet -- lib/brst/binding/ruby; then
+          # `git status` rather than `git diff`: a module generated from a new
+          # upstream .lsp file is untracked, and `git diff` does not report it.
+          drift=$(git status --porcelain -- lib/brst/binding/ruby)
+          if [ -n "$drift" ]; then
             echo "Regeneration produced a diff — committed bindings drifted from generator output:"
-            git diff --stat -- lib/brst/binding/ruby
+            echo "$drift"
             git diff -- lib/brst/binding/ruby
             exit 1
           fi
