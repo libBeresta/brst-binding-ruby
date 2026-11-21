@@ -26,7 +26,7 @@ jobs:
     environment: release
 
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
@@ -34,7 +34,11 @@ jobs:
         uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
         with:
           ruby-version: "3.4"
-          bundler-cache: true
+          # No Actions cache in the release job: install the gems fresh.
+          bundler-cache: false
+
+      - name: Install dependencies
+        run: bundle install
 
       - name: Verify tag, gem version and CHANGELOG agree
         run: |
@@ -49,3 +53,6 @@ jobs:
           fi
 
       - uses: rubygems/release-gem@5c53f5308233b7c0f47411f0471b3faae6fa57b2 # v1.4.2
+        with:
+          # Sigstore attestations are still marked experimental in release-gem.
+          attestations: false

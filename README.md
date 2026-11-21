@@ -10,11 +10,11 @@ language bindings. Bindings are auto-generated from libBeresta's canonical
 S-expression definitions in [`gen/data/*.lsp`][gen-data], so they stay faithful
 to the upstream API.
 
-## Status: v0.1.0 — experimental
+## Status: v0.1.x — experimental
 
 - Auto-generated low-level FFI surface from `gen/data/*.lsp`. This release is
   generated from libBeresta 1.0.1.
-- Tested in CI on macOS 15 and Ubuntu 24.04 with Ruby 3.2 – 3.4.
+- Tested in CI on macOS 15 and Ubuntu 24.04 with Ruby 3.2 – 4.0.
 - An idiomatic, higher-level Ruby API is **not** part of this gem; that is
   planned as a separate gem on top of these low-level bindings.
 - libBeresta itself is **not** bundled. The gem loads a `libbrst` shared
@@ -160,7 +160,7 @@ workflow refuses to publish when the tag, `VERSION` and `CHANGELOG.md` disagree.
 - [libHaru][libHaru] — original PDF C library this work ultimately descends
   from. Original copyright belongs to Takeshi Kanno and contributors.
 - Russian-language docs in the upstream `.lsp` data are preserved verbatim in
-  the parsed tree but not surfaced in v0.1.0 bindings.
+  the parsed tree but not surfaced in the v0.1.x bindings.
 
 ## License
 

@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
@@ -13,9 +16,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-15, ubuntu-24.04]
-        ruby: ["3.2", "3.3", "3.4"]
+        ruby: ["3.2", "3.3", "3.4", "4.0"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Clone libBeresta (read-only) for codegen + native build
         run: |
@@ -54,9 +57,12 @@ jobs:
 
       - name: Verify regeneration is idempotent (no diff)
         run: |
-          if ! git diff --quiet -- lib/brst/binding/ruby; then
+          # `git status` rather than `git diff`: a module generated from a new
+          # upstream .lsp file is untracked, and `git diff` does not report it.
+          drift=$(git status --porcelain -- lib/brst/binding/ruby)
+          if [ -n "$drift" ]; then
             echo "Regeneration produced a diff — committed bindings drifted from generator output:"
-            git diff --stat -- lib/brst/binding/ruby
+            echo "$drift"
             git diff -- lib/brst/binding/ruby
             exit 1
           fi

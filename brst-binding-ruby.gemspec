@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.description = <<~DESC
     Experimental Ruby FFI bindings for libBeresta, a free, cross-platform PDF
     generation C library forked from libHaru. Bindings are auto-generated from
-    libBeresta's canonical S-expression definitions (gen/data/*.lsp). v0.1.0
+    libBeresta's canonical S-expression definitions (gen/data/*.lsp). v0.1.x
     exposes a faithful low-level surface; an idiomatic high-level API is planned
     as a separate gem. Tested on macOS and Linux. libBeresta itself is not
     bundled and must be installed separately. Part of the libBeresta org's
