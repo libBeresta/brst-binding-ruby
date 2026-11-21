@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  push:
+    name: Push gem to RubyGems.org
+    if: github.repository == 'libBeresta/brst-binding-ruby'
+    runs-on: ubuntu-24.04
+
+    permissions:
+      id-token: write # mandatory for trusted publishing
+      # `rake release` only pushes when it has to create the tag itself. This
+      # workflow runs on a tag that already exists and matches the gem version
+      # (verified below), so read access is enough.
+      contents: read
+
+    # Must match the environment registered with the trusted publisher on
+    # RubyGems.org.
+    environment: release
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: Verify tag, gem version and CHANGELOG agree
+        run: |
+          version=$(ruby -r ./lib/brst/binding/ruby/version -e 'print Brst::Binding::Ruby::VERSION')
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match gem version ${version}"
+            exit 1
+          fi
+          if ! grep -Eq "^## \[${version}\] - [0-9]{4}-[0-9]{2}-[0-9]{2}$" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no dated entry for ${version}"
+            exit 1
+          fi
+
+      - uses: rubygems/release-gem@5c53f5308233b7c0f47411f0471b3faae6fa57b2 # v1.4.2

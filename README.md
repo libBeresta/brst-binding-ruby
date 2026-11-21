@@ -12,11 +12,13 @@ to the upstream API.
 
 ## Status: v0.1.0 — experimental
 
-- Auto-generated low-level FFI surface from `gen/data/*.lsp`.
-- macOS-only at this version. Linux support is planned for the next release.
+- Auto-generated low-level FFI surface from `gen/data/*.lsp`. This release is
+  generated from libBeresta 1.0.1.
+- Tested in CI on macOS 15 and Ubuntu 24.04 with Ruby 3.2 – 3.4.
 - An idiomatic, higher-level Ruby API is **not** part of this gem; that is
   planned as a separate gem on top of these low-level bindings.
-- Released in lockstep with libBeresta 1.0.0.
+- libBeresta itself is **not** bundled. The gem loads a `libbrst` shared
+  library that you build and install separately (see below).
 
 ## Mandatory baseline
 
@@ -32,15 +34,37 @@ community conventions on top of that baseline.
 
 ## Quick start
 
-### Install (development checkout)
+### Install
 
-This v0.1.0 is not yet on rubygems.org. To try it from a checkout:
+```sh
+gem install brst-binding-ruby
+```
+
+The gem does not ship libBeresta. Build libBeresta 1.0.1 as a shared library
+and install it where the system loader can find it (`/usr/local` by default):
+
+```sh
+git clone --depth=1 --branch 1.0.1 https://github.com/libBeresta/libBeresta.git
+cmake -S libBeresta -B libBeresta/build -DCMAKE_BUILD_TYPE=Release \
+      -DLIBBRST_TESTS=OFF
+cmake --build libBeresta/build -j
+sudo cmake --install libBeresta/build
+```
+
+Alternatively, point the gem at an existing build by setting
+`BRST_BINDING_RUBY_LIB=/path/to/libbrst.{dylib,so}` (see
+[Library resolution](#library-resolution)).
+
+### Development checkout
 
 ```sh
 git clone https://github.com/libBeresta/brst-binding-ruby.git
 cd brst-binding-ruby
 git clone --depth=1 https://github.com/libBeresta/libBeresta.git ../libBeresta
-brew install cmake libpng                    # macOS native deps
+# Native deps — macOS:
+brew install cmake libpng
+# Native deps — Ubuntu:
+#   sudo apt-get install -y cmake libpng-dev zlib1g-dev pkg-config build-essential
 bundle install
 cmake -S . -B build -DLIBBRST_SOURCE_DIR=$(cd ../libBeresta && pwd) \
                     -DCMAKE_BUILD_TYPE=Release
@@ -83,7 +107,7 @@ lib/brst/binding/ruby/types.rb       (consolidated typedefs / enums / structs)
 lib/brst/binding/ruby/<file>.rb      (one FFI module per .lsp file)
         │
         ▼
-ext/libBeresta/lib/libbrst.dylib     (cmake-built native library)
+ext/libBeresta/lib/libbrst.{dylib,so}  (cmake-built native library)
 ```
 
 The generator parses S-expressions directly. The `gen/json/*.json` files are
@@ -118,6 +142,15 @@ loaded native library (e.g. caption / C-symbol drift, or a feature compiled
 out of this build), the corresponding `attach_function` is recorded in
 `<Module>::MISSING_SYMBOLS` and the rest of the gem still loads.
 
+## Releasing
+
+Releases are published to rubygems.org by
+[`.github/workflows/release.yml`](.github/workflows/release.yml) through
+[Trusted Publishing][trusted-publishing]; no API token is stored in the
+repository. To cut a release, bump `VERSION`, give the version a dated entry in
+`CHANGELOG.md`, merge to `main`, then push a matching `v<version>` tag. The
+workflow refuses to publish when the tag, `VERSION` and `CHANGELOG.md` disagree.
+
 ## Acknowledgements
 
 - [@dmitrys99][dmitrys99] — libBeresta maintainer, designer of the S-expression
@@ -137,3 +170,4 @@ out of this build), the corresponding `attach_function` is recorded in
 [libHaru]: https://github.com/libharu/libharu
 [gen-data]: https://github.com/libBeresta/libBeresta/tree/master/gen/data
 [dmitrys99]: https://github.com/dmitrys99
+[trusted-publishing]: https://guides.rubygems.org/trusted-publishing/

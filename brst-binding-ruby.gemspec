@@ -12,8 +12,9 @@ Gem::Specification.new do |spec|
     generation C library forked from libHaru. Bindings are auto-generated from
     libBeresta's canonical S-expression definitions (gen/data/*.lsp). v0.1.0
     exposes a faithful low-level surface; an idiomatic high-level API is planned
-    as a separate gem. Currently tested on macOS only; Linux support is planned
-    for the next release. Part of the libBeresta org's brst-binding-<lang> family.
+    as a separate gem. Tested on macOS and Linux. libBeresta itself is not
+    bundled and must be installed separately. Part of the libBeresta org's
+    brst-binding-<lang> family.
   DESC
 
   spec.homepage              = "https://github.com/libBeresta/brst-binding-ruby"
@@ -27,14 +28,12 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir[
     "lib/**/*.rb",
-    "ext/extconf.rb",
     "CMakeLists.txt",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
   ]
   spec.require_paths = ["lib"]
-  spec.extensions    = ["ext/extconf.rb"]
 
   spec.add_dependency "ffi", "~> 1.16"
 
