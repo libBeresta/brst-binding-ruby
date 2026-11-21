@@ -49,3 +49,6 @@ jobs:
           fi
 
       - uses: rubygems/release-gem@5c53f5308233b7c0f47411f0471b3faae6fa57b2 # v1.4.2
+        with:
+          # Sigstore attestations are still marked experimental in release-gem.
+          attestations: false
