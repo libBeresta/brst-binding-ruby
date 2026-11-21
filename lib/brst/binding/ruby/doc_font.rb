@@ -33,7 +33,7 @@ module Brst
         end
 
           safe_attach :BRST_Doc_Font, [:Doc, :string, :string], :Font
-          safe_attach :BRST_Doc_TTFont_LoadFromFile, [:Doc, :string, :int32], :Font
+          safe_attach :BRST_Doc_TTFont_LoadFromFile, [:Doc, :string, :int32], :string
           safe_attach :BRST_Doc_Type1Font_LoadFromFile, [:Doc, :string, :string], :string
           safe_attach :BRST_Doc_TTFont_LoadFromFile2, [:Doc, :string, :uint32, :int32], :string
           safe_attach :BRST_Doc_TTFont_LoadFromMemory, [:Doc, :pointer, :uint32, :int32], :string

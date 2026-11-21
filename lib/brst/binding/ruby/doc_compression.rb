@@ -32,7 +32,7 @@ module Brst
           MISSING_SYMBOLS << [name, e.message]
         end
 
-          safe_attach :BRST_Doc_SetCompressionMode, [:Doc, :CompressionMode], :uint32
+          safe_attach :BRST_Doc_SetCompressionMode, [:Doc, :uint32], :uint32
       end
     end
   end

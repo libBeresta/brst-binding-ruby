@@ -33,8 +33,8 @@ module Brst
         end
 
           safe_attach :BRST_Doc_SetOpenAction, [:Doc, :Destination], :uint32
-          safe_attach :BRST_Doc_ViewerPreference, [:Doc], :ViewerPreference
-          safe_attach :BRST_Doc_SetViewerPreference, [:Doc, :ViewerPreference], :uint32
+          safe_attach :BRST_Doc_ViewerPreference, [:Doc], :uint32
+          safe_attach :BRST_Doc_SetViewerPreference, [:Doc, :uint32], :uint32
       end
     end
   end

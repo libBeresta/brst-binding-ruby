@@ -33,7 +33,7 @@ module Brst
         end
 
           safe_attach :BRST_Doc_SetPassword, [:Doc, :string, :string], :uint32
-          safe_attach :BRST_Doc_SetPermission, [:Doc, :Permission], :uint32
+          safe_attach :BRST_Doc_SetPermission, [:Doc, :uint32], :uint32
           safe_attach :BRST_Doc_SetEncryptionMode, [:Doc, :EncryptMode, :uint32], :uint32
       end
     end
