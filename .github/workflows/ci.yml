@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
@@ -15,7 +18,7 @@ jobs:
         os: [macos-15, ubuntu-24.04]
         ruby: ["3.2", "3.3", "3.4", "4.0"]
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Clone libBeresta (read-only) for codegen + native build
         run: |
