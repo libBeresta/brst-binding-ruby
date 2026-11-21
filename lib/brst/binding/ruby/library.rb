@@ -40,6 +40,32 @@ module Brst
           # Fall back to library names; FFI will search system paths.
           %w[brst libbrst]
         end
+
+        INSTALL_URL = "https://github.com/libBeresta/brst-binding-ruby#install"
+
+        # Message for the LoadError raised when FFI cannot open libbrst. FFI's
+        # own message lists every path it tried but not what to do about it,
+        # so lead with that and keep the original text at the end.
+        def load_error_message(original)
+          override = ENV["BRST_BINDING_RUBY_LIB"]
+          advice =
+            if override && !override.empty?
+              "BRST_BINDING_RUBY_LIB is set to #{override.inspect}; check that it " \
+                "points to libbrst.dylib / libbrst.so."
+            else
+              "This gem does not bundle libBeresta. Install libBeresta where the " \
+                "system loader can find it, or set BRST_BINDING_RUBY_LIB to the path " \
+                "of libbrst.dylib / libbrst.so."
+            end
+
+          [
+            "brst-binding-ruby could not load the libBeresta shared library (libbrst).",
+            advice,
+            "See #{INSTALL_URL} for build steps.",
+            "",
+            "Original error: #{original}"
+          ].join("\n")
+        end
       end
     end
   end

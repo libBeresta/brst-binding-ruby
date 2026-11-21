@@ -23,8 +23,17 @@ end
 # Auto-load every generated FFI module. Order is irrelevant because every type
 # (pointer/enum/struct/definition) is centralized in `types.rb`, which has
 # already been loaded above.
-Dir[File.expand_path("ruby/*.rb", __dir__)].sort.each do |f|
-  base = File.basename(f, ".rb")
-  next if %w[version library types].include?(base)
-  require f
+begin
+  Dir[File.expand_path("ruby/*.rb", __dir__)].sort.each do |f|
+    base = File.basename(f, ".rb")
+    next if %w[version library types].include?(base)
+    require f
+  end
+rescue LoadError => e
+  # A LoadError that carries a path comes from `require` itself. One without
+  # a path is FFI failing to open libbrst: say how to fix that instead of
+  # only listing the paths the loader tried.
+  raise if e.path
+
+  raise LoadError, Brst::Binding::Ruby::Library.load_error_message(e.message), e.backtrace
 end
