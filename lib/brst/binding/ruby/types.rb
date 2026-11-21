@@ -56,15 +56,10 @@ module Brst
           mod.typedef :pointer, :Error_Handler
           mod.typedef :pointer, :Alloc_Func
           mod.typedef :pointer, :Free_Func
-          mod.typedef :pointer, :RAW_POINTER
-          mod.typedef :pointer, :DASH_PATTERN
-          mod.typedef :pointer, :Error_Handler
-          mod.typedef :pointer, :Alloc_Func
-          mod.typedef :pointer, :Free_Func
-end
+        end
 
-# ---- opaque pointers ----
-def apply_pointers(mod)
+        # ---- opaque pointers ----
+        def apply_pointers(mod)
           mod.typedef :pointer, :Array
           mod.typedef :pointer, :Date
           mod.typedef :pointer, :Dict
@@ -76,10 +71,10 @@ def apply_pointers(mod)
           mod.typedef :pointer, :MMgr
           mod.typedef :pointer, :Stream
           mod.typedef :pointer, :Xref
-end
+        end
 
-# ---- enums (improvement #2: each enum acts as an :int-backed typedef) ----
-def apply_enums(mod)
+        # ---- enums (improvement #2: each enum acts as an :int-backed typedef) ----
+        def apply_enums(mod)
           mod.enum :AnnotType, [:ANNOT_TEXT, :ANNOT_LINK, :ANNOT_FREE_TEXT, :ANNOT_LINE, :ANNOT_SQUARE, :ANNOT_CIRCLE, :ANNOT_POLYGON, :ANNOT_POLYLINE, :ANNOT_HIGHLIGHT, :ANNOT_UNDERLINE, :ANNOT_SQUIGGLY, :ANNOT_STRIKEOUT, :ANNOT_STAMP, :ANNOT_CARET, :ANNOT_INK, :ANNOT_POPUP, :ANNOT_FILE_ATTACHMENT, :ANNOT_SOUND, :ANNOT_MOVIE, :ANNOT_WIDGET, :ANNOT_SCREEN, :ANNOT_PRINTER_MARK, :ANNOT_TRAPNET, :ANNOT_WATERMARK, :ANNOT_3D, :ANNOT_REDACT, :ANNOT_RICH_MEDIA, :ANNOT_PROJECTION]
           mod.enum :AnnotFlags, [:ANNOT_FLAG_INVISIBLE, :ANNOT_FLAG_HIDDEN, :ANNOT_FLAG_PRINT, :ANNOT_FLAG_NOZOOM, :ANNOT_FLAG_NOROTATE, :ANNOT_FLAG_NOVIEW, :ANNOT_FLAG_READONLY, :ANNOT_FLAG_LOCKED, :ANNOT_FLAG_TOGGLE_NOVIEW, :ANNOT_FLAG_LOCKED_CONTENT]
           mod.enum :AnnotHighlightMode, [:ANNOT_HIGHLIGHT_MODE_NONE, :ANNOT_HIGHLIGHT_MODE_INVERT, :ANNOT_HIGHLIGHT_MODE_OUTLINE, :ANNOT_HIGHLIGHT_MODE_PUSH]
@@ -112,10 +107,10 @@ def apply_enums(mod)
           mod.enum :TextRenderingMode, [:TEXT_RENDERING_MODE_FILL, :TEXT_RENDERING_MODE_STROKE, :TEXT_RENDERING_MODE_FILL_THEN_STROKE, :TEXT_RENDERING_MODE_INVISIBLE, :TEXT_RENDERING_MODE_FILL_CLIPPING, :TEXT_RENDERING_MODE_STROKE_CLIPPING, :TEXT_RENDERING_MODE_FILL_STROKE_CLIPPING, :TEXT_RENDERING_MODE_CLIPPING]
           mod.enum :TextAlignment, [:TEXT_ALIGN_LEFT, :TEXT_ALIGN_RIGHT, :TEXT_ALIGN_CENTER, :TEXT_ALIGN_JUSTIFY]
           mod.enum :WritingMode, [:WRITING_MODE_HORIZONTAL, :WRITING_MODE_VERTICAL]
-end
+        end
 
-# ---- structs (improvement #3: by_value alias) ----
-def apply_structs(mod)
+        # ---- structs (improvement #3: by_value alias) ----
+        def apply_structs(mod)
           unless mod.const_defined?(:RGBColorStruct, false)
             klass = Class.new(FFI::Struct) do
               layout :r, :float,
@@ -163,10 +158,10 @@ def apply_structs(mod)
             mod.const_set(:TextWidthStruct, klass)
           end
           mod.typedef mod.const_get(:TextWidthStruct).by_value, :TextWidth
-end
+        end
 
-# ---- definitions (typedef aliases) ----
-def apply_definitions(mod)
+        # ---- definitions (typedef aliases) ----
+        def apply_definitions(mod)
           mod.typedef :Dict, :Annotation
           mod.typedef :Array, :Destination
           mod.typedef :Dict, :EmbeddedFile

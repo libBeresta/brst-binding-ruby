@@ -78,13 +78,20 @@ module BrstBindingRubyGen
                 def apply_scalars(mod)
       RB
 
+      # types.lsp spells some names with `-`, and SymbolTable#finalize! adds
+      # the `_` spelling as well. Both map to the same Ruby symbol, so emit
+      # each typedef once.
+      emitted = {}
       symbols.inner_to_ffi.each do |inner, ffi|
         next if inner == "void"
         next if inner.include?("*") # pointer-suffix variants are pointers
-        out << "          mod.typedef #{ffi.inspect}, :#{ruby_type_sym(inner)}\n"
+        sym = ruby_type_sym(inner)
+        next if emitted[sym]
+        emitted[sym] = true
+        out << "          mod.typedef #{ffi.inspect}, :#{sym}\n"
       end
 
-      out << <<~RB
+      out << method_break(<<~RB)
                 end
 
                 # ---- opaque pointers ----
@@ -94,7 +101,7 @@ module BrstBindingRubyGen
         out << "          mod.typedef :pointer, :#{ruby_type_sym(n)}\n"
       end
 
-      out << <<~RB
+      out << method_break(<<~RB)
                 end
 
                 # ---- enums (improvement #2: each enum acts as an :int-backed typedef) ----
@@ -113,7 +120,7 @@ module BrstBindingRubyGen
         out << "          mod.enum #{symbol_literal(enum_def[:name])}, [#{elements_src}]\n"
       end
 
-      out << <<~RB
+      out << method_break(<<~RB)
                 end
 
                 # ---- structs (improvement #3: by_value alias) ----
@@ -133,7 +140,7 @@ module BrstBindingRubyGen
         out << "          mod.typedef mod.const_get(:#{klass}).by_value, :#{ruby_type_sym(s[:name])}\n"
       end
 
-      out << <<~RB
+      out << method_break(<<~RB)
                 end
 
                 # ---- definitions (typedef aliases) ----
@@ -238,6 +245,13 @@ module BrstBindingRubyGen
     end
 
     # ---- helpers ------------------------------------------------------------
+
+    # `<<~` strips the indentation shared by every line of a chunk, so a chunk
+    # that only closes one `apply_*` method and opens the next comes out at
+    # column 0. Put it back at the method level inside `module Types`.
+    def method_break(chunk)
+      chunk.gsub(/^(?=.)/, " " * 8)
+    end
 
     def ruby_type_sym(name)
       name.to_s.tr("-", "_").gsub(/[^A-Za-z0-9_]/, "_")
